@@ -1,0 +1,39 @@
+# .github/workflows/publish.yml
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - "v*" # Trigger the workflow when a new version tag (e.g., v1.0.0) is pushed
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js (Bun uses Node.js under the hood)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          registry-url: https://registry.npmjs.org/
+
+      # Step 3: Install dependencies with Bun
+      - name: Install dependencies
+        run: bun install
+
+      # Step 4: Build the project
+      - name: Build project
+        run: bun run build
+
+      # Step 5: Authenticate with npm
+      - name: Authenticate with npm
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      # Step 6: Publish the package
+      - name: Publish package
+        run: bun publish
