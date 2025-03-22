@@ -9,3 +9,9 @@ Install the plugin using Bun:
 ```bash
 bun add @jabirdev/md-typography
 ```
+
+```css
+@import "tailwindcss";
+
+@plugin "@jabirdev/md-typography";
+```
